@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para ti, mi amor ❤</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@500;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rosa:#ff6fa5; --rosa-claro:#ffc2d9; --vino:#7a0f3a; --dorado:#ffd98e;
+    --vidrio:rgba(255,255,255,.12); --borde:rgba(255,255,255,.25);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family:'Poppins',sans-serif; color:#fff; overflow-x:hidden; min-height:100vh;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,111,165,.35), transparent 40%),
+      radial-gradient(circle at 80% 30%, rgba(186,85,211,.35), transparent 45%),
+      radial-gradient(circle at 50% 90%, rgba(255,64,129,.30), transparent 50%),
+      linear-gradient(135deg,#2b0018 0%,#5c0a35 45%,#3a0b4f 100%);
+    background-attachment:fixed;
+  }
+  /* Estrellitas de fondo */
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      radial-gradient(2px 2px at 10% 20%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 30% 70%, #ffe, transparent),
+      radial-gradient(2px 2px at 70% 15%, #fff, transparent),
+      radial-gradient(1px 1px at 85% 60%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 50% 40%, #ffd, transparent),
+      radial-gradient(1px 1px at 15% 85%, #fff, transparent),
+      radial-gradient(2px 2px at 92% 88%, #fff, transparent);
+    animation:titilar 4s ease-in-out infinite alternate;
+  }
+  @keyframes titilar{from{opacity:.4}to{opacity:1}}
+
+  /* Corazones flotantes */
+  #corazones{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+  .corazon{position:absolute;bottom:-40px;animation:subir linear forwards;opacity:.8;filter:drop-shadow(0 0 6px rgba(255,111,165,.8))}
+  @keyframes subir{
+    0%{transform:translateY(0) rotate(0) scale(1);opacity:0}
+    10%{opacity:.9}
+    100%{transform:translateY(-115vh) rotate(360deg) scale(1.3);opacity:0}
+  }
+
+  main{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px}
+  .pantalla{display:none;width:100%;max-width:560px;text-align:center;animation:aparecer .9s ease}
+  .pantalla.activa{display:block}
+  @keyframes aparecer{from{opacity:0;transform:translateY(25px) scale(.97)}to{opacity:1;transform:none}}
+
+  .tarjeta{
+    background:var(--vidrio); border:1px solid var(--borde); border-radius:24px;
+    padding:32px 24px; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 20px 60px rgba(0,0,0,.4), inset 0 0 30px rgba(255,111,165,.15);
+  }
+  h1{font-family:'Great Vibes',cursive;font-size:clamp(2.6rem,9vw,3.8rem);font-weight:400;
+     text-shadow:0 0 18px rgba(255,111,165,.9);margin-bottom:8px;line-height:1.1}
+  h2{font-family:'Dancing Script',cursive;font-size:clamp(1.6rem,6vw,2.1rem);margin-bottom:14px;color:var(--rosa-claro)}
+  p.sub{opacity:.85;font-weight:300;margin-bottom:22px;line-height:1.6}
+
+  /* Encabezado de bienvenida */
+  .saludo{font-family:'Dancing Script',cursive;font-size:1.6rem;color:var(--rosa-claro);opacity:.9;margin-bottom:-6px}
+  .nombre{
+    font-size:clamp(4rem,16vw,5.6rem);margin-bottom:0;
+    background:linear-gradient(90deg,#fff 0%,#ffc2d9 35%,#ffd98e 50%,#ffc2d9 65%,#fff 100%);
+    background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 14px rgba(255,111,165,.85));
+    animation:brillo 4s linear infinite, aparecer 1.2s ease;
+  }
+  @keyframes brillo{to{background-position:200% center}}
+  .divisor{display:flex;align-items:center;justify-content:center;gap:12px;margin:2px 0 6px;color:var(--rosa);
+           font-size:1.1rem;animation:latido 1.4s ease-in-out infinite}
+  .divisor span{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--rosa-claro),transparent)}
+  .mi-amor{font-family:'Great Vibes',cursive;font-size:2.2rem;color:#fff;text-shadow:0 0 12px rgba(255,111,165,.7);margin-bottom:10px}
+  .insignia{
+    display:inline-block;position:relative;overflow:hidden;margin-bottom:22px;
+    padding:10px 28px;border-radius:50px;font-weight:600;font-size:1.15rem;letter-spacing:.5px;color:#5a1030;
+    background:linear-gradient(135deg,#ffe3a3,#ffd98e 40%,#f7b267);
+    box-shadow:0 6px 22px rgba(255,217,142,.45), inset 0 0 0 1px rgba(255,255,255,.6);
+  }
+  .insignia::after{
+    content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;
+    background:linear-gradient(120deg,transparent,rgba(255,255,255,.75),transparent);
+    transform:skewX(-20deg);animation:destello 3s ease-in-out infinite;
+  }
+  @keyframes destello{0%,60%{left:-60%}100%{left:130%}}
+
+  input,select{
+    width:100%;padding:14px 16px;border-radius:14px;border:1px solid var(--borde);
+    background:rgba(255,255,255,.15);color:#fff;font-size:1.05rem;font-family:inherit;
+    outline:none;text-align:center;margin-bottom:16px;transition:.3s;
+  }
+  input::placeholder{color:rgba(255,255,255,.6)}
+  input:focus{border-color:var(--rosa);box-shadow:0 0 0 4px rgba(255,111,165,.25)}
+  input[type=date]::-webkit-calendar-picker-indicator{filter:invert(1)}
+  option{color:#000}
+
+  .btn{
+    display:inline-block;border:none;cursor:pointer;font-family:inherit;font-weight:600;font-size:1.05rem;
+    padding:14px 34px;border-radius:50px;color:#fff;
+    background:linear-gradient(135deg,#ff4f8b,#c2185b);
+    box-shadow:0 8px 25px rgba(255,79,139,.5);transition:transform .2s, box-shadow .2s;
+  }
+  .btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 12px 30px rgba(255,79,139,.7)}
+  .btn.latir{animation:latido 1.4s ease-in-out infinite}
+  @keyframes latido{0%,100%{transform:scale(1)}15%{transform:scale(1.08)}30%{transform:scale(1)}45%{transform:scale(1.06)}}
+
+  .mensaje{min-height:24px;margin-top:6px;color:var(--rosa-claro);font-size:.95rem}
+  .temblar{animation:temblar .45s}
+  @keyframes temblar{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
+
+  /* Contador */
+  .contador{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:6px 0 22px}
+  .caja{background:rgba(255,255,255,.12);border:1px solid var(--borde);border-radius:16px;padding:10px 6px;min-width:72px}
+  .caja b{display:block;font-size:1.7rem;color:var(--dorado);text-shadow:0 0 10px rgba(255,217,142,.6)}
+  .caja span{font-size:.75rem;opacity:.8;text-transform:uppercase;letter-spacing:1px}
+
+  /* Carrusel */
+  .carrusel{position:relative;width:100%;aspect-ratio:4/5;max-height:62vh;border-radius:20px;overflow:hidden;
+            box-shadow:0 15px 40px rgba(0,0,0,.5);border:3px solid rgba(255,255,255,.35);margin-bottom:14px;background:#3a0b2a}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease, transform 6s ease;transform:scale(1.08)}
+  .slide.visible{opacity:1;transform:scale(1)}
+  .slide img{width:100%;height:100%;object-fit:cover;display:block}
+  .slide .vacio{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:5rem;
+                background:linear-gradient(135deg,#ff6fa5,#8e2de2)}
+  .leyenda{position:absolute;left:0;right:0;bottom:0;padding:40px 16px 16px;
+           background:linear-gradient(transparent,rgba(0,0,0,.75));font-family:'Dancing Script',cursive;font-size:1.4rem}
+  .flecha{position:absolute;top:50%;transform:translateY(-50%);z-index:3;background:rgba(0,0,0,.3);border:none;color:#fff;
+          width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer}
+  .flecha.izq{left:10px}.flecha.der{right:10px}
+  .puntos{display:flex;justify-content:center;gap:8px;margin-bottom:22px}
+  .puntos i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:.3s}
+  .puntos i.on{background:var(--rosa);width:24px;border-radius:5px}
+  .contadorFotos{font-size:.9rem;padding:4px 14px;border-radius:20px;background:rgba(255,255,255,.12);border:1px solid var(--borde)}
+
+  /* Preguntas */
+  .progreso{font-size:1.4rem;letter-spacing:6px;margin-bottom:16px}
+  .opciones{display:grid;gap:10px;margin-bottom:12px}
+  .opcion{padding:13px;border-radius:14px;border:1px solid var(--borde);background:rgba(255,255,255,.1);
+          color:#fff;font-family:inherit;font-size:1rem;cursor:pointer;transition:.25s}
+  .opcion:hover{background:rgba(255,111,165,.35)}
+  .pista{font-size:.85rem;opacity:.75;margin-top:8px;font-style:italic}
+
+  /* Sobre y carta */
+  .sobre{position:relative;width:min(300px,80vw);height:min(200px,53vw);margin:30px auto;cursor:pointer}
+  .sobre .cuerpo{position:absolute;inset:0;background:linear-gradient(135deg,#ff8fb5,#e0457b);border-radius:8px;
+                 box-shadow:0 15px 35px rgba(0,0,0,.4)}
+  .sobre .tapa{position:absolute;top:0;left:0;width:0;height:0;border-left:min(150px,40vw) solid transparent;
+               border-right:min(150px,40vw) solid transparent;border-top:min(110px,29vw) solid #ff6f9f;
+               transform-origin:top;transition:transform .8s;z-index:3}
+  .sobre .sello{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);font-size:2.4rem;z-index:4;transition:.5s}
+  .sobre.abierto .tapa{transform:rotateX(180deg);z-index:0}
+  .sobre.abierto .sello{opacity:0;transform:translate(-50%,-50%) scale(2)}
+  .toca{opacity:.8;animation:latido 1.6s infinite}
+
+  .carta{
+    display:none;text-align:left;color:#5a1030;line-height:1.8;font-size:1.02rem;
+    background:linear-gradient(#fffaf3,#ffeef3);border-radius:10px;padding:34px 26px;
+    box-shadow:0 20px 50px rgba(0,0,0,.45);position:relative;
+    background-image:repeating-linear-gradient(transparent 0 31px, rgba(255,111,165,.18) 31px 32px);
+    animation:aparecer 1s ease;
+  }
+  .carta h3{font-family:'Great Vibes',cursive;font-size:2.4rem;color:#c2185b;margin-bottom:10px;font-weight:400}
+  .carta .texto{white-space:pre-line;font-family:'Dancing Script',cursive;font-size:1.35rem;min-height:120px}
+  .carta .firma{text-align:right;font-family:'Great Vibes',cursive;font-size:2rem;color:#c2185b;margin-top:16px;opacity:0;transition:1s}
+  .cursor::after{content:"|";animation:parpadeo .8s infinite}
+  @keyframes parpadeo{50%{opacity:0}}
+
+  #btnMusica{position:fixed;top:14px;right:14px;z-index:5;background:var(--vidrio);border:1px solid var(--borde);
+             color:#fff;width:44px;height:44px;border-radius:50%;font-size:1.2rem;cursor:pointer;backdrop-filter:blur(8px)}
+</style>
+</head>
+<body>
+
+<div id="corazones"></div>
+<button id="btnMusica" title="Música" style="display:none">🎵</button>
+<audio id="audio" loop></audio>
+
+<main>
+  <!-- 1. INICIO: pedir la fecha -->
+  <section class="pantalla activa" id="p-inicio">
+    <div class="tarjeta">
+      <p class="saludo">Hola,</p>
+      <h1 class="nombre" id="tituloInicio">Gisse</h1>
+      <div class="divisor"><span></span>🌷<span></span></div>
+      <p class="mi-amor">Mi amor</p>
+      <div class="insignia" id="insignia">¡Feliz 4 meses!</div>
+      <p class="sub">Para entrar a este lugar especial,<br>dime: ¿cuándo empezó nuestra historia? 💕</p>
+      <input type="date" id="fechaIngresada">
+      <button class="btn latir" id="btnEntrar">Entrar ❤</button>
+      <div class="mensaje" id="msgInicio"></div>
+    </div>
+  </section>
+
+  <!-- 2. RECUERDOS -->
+  <section class="pantalla" id="p-recuerdos">
+    <h1>Nuestra historia</h1>
+    <p class="sub" id="textoTiempo">Llevamos juntos…</p>
+    <div class="contador">
+      <div class="caja"><b id="cAnios">0</b><span>años</span></div>
+      <div class="caja"><b id="cMeses">0</b><span>meses</span></div>
+      <div class="caja"><b id="cDias">0</b><span>días</span></div>
+      <div class="caja"><b id="cHoras">0</b><span>horas</span></div>
+      <div class="caja"><b id="cSeg">0</b><span>seg</span></div>
+    </div>
+    <div class="carrusel" id="carrusel">
+      <button class="flecha izq" id="ant">‹</button>
+      <button class="flecha der" id="sig">›</button>
+    </div>
+    <div class="puntos" id="puntos"></div>
+    <button class="btn latir" id="btnCarta">Tengo algo para ti 💌</button>
+  </section>
+
+  <!-- 3. PREGUNTAS -->
+  <section class="pantalla" id="p-preguntas">
+    <div class="tarjeta" id="tarjetaPregunta">
+      <div class="progreso" id="progreso"></div>
+      <h2 id="textoPregunta"></h2>
+      <div id="zonaRespuesta"></div>
+      <div class="mensaje" id="msgPregunta"></div>
+    </div>
+  </section>
+
+  <!-- 4. CARTA -->
+  <section class="pantalla" id="p-carta">
+    <h2 id="tituloSobre">Esto es para ti…</h2>
+    <div class="sobre" id="sobre">
+      <div class="cuerpo"></div><div class="tapa"></div><div class="sello">🌷</div>
+    </div>
+    <p class="toca" id="toca">Toca el sobre para abrirlo</p>
+    <div class="carta" id="carta">
+      <h3 id="saludoCarta"></h3>
+      <div class="texto" id="textoCarta"></div>
+      <div class="firma" id="firma"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* =========================================================
+   ✏️  CONFIGURACIÓN: EDITA SOLO ESTA PARTE
+   ========================================================= */
+const CONFIG = {
+  nombreElla: "Gisse",                   // su nombre
+  tuNombre:   "John",                    // tu firma
+  fechaInicio:"2026-07-04",              // AAAA-MM-DD  ← RESPUESTA para entrar (4 de julio de 2026)
+  mesesCumplimos: 4,                     // número que aparece en "¡Feliz 4 meses!", en la pregunta y en la carta
+  musica:     "",                        // ej: "musica/cancion.mp3" (opcional)
+
+  // FOTOS ILIMITADAS: solo súbelas a la carpeta "fotos" con nombres consecutivos
+  // foto1.jpg, foto2.jpg, foto3.png ... (sin saltarte números). El detalle las detecta solo.
+  carpetaFotos: "fotos/",
+  extensiones: ["jpg","jpeg","png","webp","JPG","JPEG","PNG"],
+  maxFotos: 300,
+  // Leyendas opcionales por número de foto. Las que no pongas usan las frases de abajo.
+  leyendas: {
+    1: "Nuestra primera cita 🌷",
+  },
+  frasesPorDefecto: [
+    "Contigo todo es mejor 💕",
+    "Mi lugar favorito: a tu lado 🌷",
+    "Un recuerdo que guardo en el corazón",
+    "Ese día que no paramos de reír 😄",
+    "Tú y yo, siempre 💖",
+    "Mi tulipán favorito eres tú 🌷",
+  ],
+  segundosPorFoto: 4,
+
+  // Preguntas antes de la carta.
+  // tipo: "fecha" | "numero" | "texto" | "opciones"
+  // respuesta "AUTO_MESES" / "AUTO_ANIOS" se calcula sola con la fecha de inicio.
+  preguntas: [
+    { pregunta:"¿En qué fecha nos hicimos enamorados?", tipo:"fecha", respuesta:"2026-07-04",
+      pista:"Fue un día muy especial… 💘" },
+    { pregunta:"¿Cuántos meses cumplimos hoy?", tipo:"numero", respuesta:"AUTO_MESES",
+      pista:"Cuenta bien, cada mes contigo vale oro ✨" },
+    { pregunta:"¿Dónde fue nuestra primera cita?", tipo:"texto", respuesta:["parque kennedy","miraflores"],
+      pista:"Empieza con P… 😉" },
+    { pregunta:"¿Qué es lo que más amo de ti?", tipo:"opciones",
+      opciones:["Tu sonrisa","Tus ojos","Tu forma de ser","¡Todo! 💖"], respuesta:"¡Todo! 💖",
+      pista:"Piensa en grande 😌" },
+  ],
+
+  // La carta (usa saltos de línea normales)
+  carta: `Desde el día en que llegaste a mi vida, todo tiene más color.
+
+Gracias por cada sonrisa, cada abrazo y cada momento que hemos compartido. Eres mi lugar seguro, mi alegría y mi persona favorita.
+
+Hoy cumplimos {MESES} meses juntos y quiero que sepas que te elegiría una y mil veces más.
+
+Te amo con todo mi corazón.`
+};
+/* ========================================================= */
+
+const $ = id => document.getElementById(id);
+const parseFecha = s => { const [a,m,d] = s.split("-").map(Number); return new Date(a, m-1, d); };
+const normalizar = s => String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+
+function diferencia(inicio, ahora){
+  let y = ahora.getFullYear()-inicio.getFullYear();
+  let m = ahora.getMonth()-inicio.getMonth();
+  let d = ahora.getDate()-inicio.getDate();
+  if(d<0){ m--; d += new Date(ahora.getFullYear(), ahora.getMonth(), 0).getDate(); }
+  if(m<0){ y--; m += 12; }
+  return { y, m, d, totalMeses: y*12+m };
+}
+const inicio = parseFecha(CONFIG.fechaInicio);
+
+/* ---------- Corazones flotantes ---------- */
+const simbolos = ["🌷","🌷","🌷","🌷","❤","💕","💖","✨"];   // tulipanes con algunos corazones
+function lanzarCorazon(){
+  const c = document.createElement("span");
+  c.className = "corazon";
+  c.textContent = simbolos[Math.floor(Math.random()*simbolos.length)];
+  c.style.left = Math.random()*100 + "vw";
+  c.style.fontSize = (14 + Math.random()*26) + "px";
+  c.style.animationDuration = (6 + Math.random()*7) + "s";
+  $("corazones").appendChild(c);
+  setTimeout(()=>c.remove(), 14000);
+}
+setInterval(lanzarCorazon, 450);
+function lluviaDeCorazones(n=40){ for(let i=0;i<n;i++) setTimeout(lanzarCorazon, i*60); }
+
+/* ---------- Navegación ---------- */
+function mostrar(id){
+  document.querySelectorAll(".pantalla").forEach(p=>p.classList.remove("activa"));
+  $(id).classList.add("activa");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* ---------- Música ---------- */
+if(CONFIG.musica){
+  $("audio").src = CONFIG.musica;
+  $("btnMusica").style.display = "block";
+  $("btnMusica").onclick = () => { const a=$("audio"); a.paused ? a.play() : a.pause(); };
+}
+
+/* ---------- 1. Inicio ---------- */
+$("tituloInicio").textContent = CONFIG.nombreElla;
+(() => {
+  const m = CONFIG.mesesCumplimos;
+  $("insignia").textContent = `¡Feliz ${m} ${m === 1 ? "mes" : "meses"}!`;
+})();
+$("btnEntrar").onclick = () => {
+  const v = $("fechaIngresada").value;
+  if(!v){ $("msgInicio").textContent = "Elige una fecha, amor 💭"; return; }
+  if(v !== CONFIG.fechaInicio){
+    $("msgInicio").textContent = "Mmm… esa no es nuestra fecha 💔 inténtalo otra vez";
+    $("p-inicio").querySelector(".tarjeta").classList.add("temblar");
+    setTimeout(()=>$("p-inicio").querySelector(".tarjeta").classList.remove("temblar"),500);
+    return;
+  }
+  lluviaDeCorazones();
+  if(CONFIG.musica) $("audio").play().catch(()=>{});
+  mostrar("p-recuerdos");
+  iniciarContador();
+  iniciarCarrusel();
+};
+
+/* ---------- 2. Contador ---------- */
+function iniciarContador(){
+  const tick = () => {
+    const ahora = new Date();
+    const r = diferencia(inicio, ahora);
+    $("cAnios").textContent = r.y;
+    $("cMeses").textContent = r.m;
+    $("cDias").textContent  = r.d;
+    $("cHoras").textContent = ahora.getHours();
+    $("cSeg").textContent   = ahora.getSeconds();
+    const totalDias = Math.floor((ahora - inicio)/86400000);
+    $("textoTiempo").innerHTML = `${totalDias.toLocaleString("es")} días amándote 💞 · ${r.totalMeses} meses juntos`;
+  };
+  tick(); setInterval(tick, 1000);
+}
+
+/* ---------- Carrusel ---------- */
+let actual = 0, timer, totalFotos = 0;
+const cargarImagen = src => new Promise(res => {
+  const i = new Image(); i.onload = () => res(src); i.onerror = () => res(null); i.src = src;
+});
+// Busca foto1, foto2, foto3... hasta que no encuentre la siguiente
+async function buscarFotos(){
+  const fotos = [], frases = CONFIG.frasesPorDefecto;
+  for(let n = 1; n <= CONFIG.maxFotos; n++){
+    let src = null;
+    for(const ext of CONFIG.extensiones){
+      src = await cargarImagen(`${CONFIG.carpetaFotos}foto${n}.${ext}`);
+      if(src) break;
+    }
+    if(!src) break;
+    fotos.push({ src, texto: CONFIG.leyendas[n] || frases[(n-1) % frases.length] });
+  }
+  return fotos;
+}
+const promesaFotos = buscarFotos();   // empieza a buscar mientras ella elige la fecha
+
+async function iniciarCarrusel(){
+  const car = $("carrusel"), pts = $("puntos");
+  let fotos = await promesaFotos;
+  if(fotos.length === 0) fotos = [{ src:null, texto:"Aquí vivirán nuestros recuerdos 🌷" }];
+  totalFotos = fotos.length;
+  const muchas = totalFotos > 12;   // con muchas fotos se muestra "3 / 40" en vez de puntos
+
+  fotos.forEach((f,i)=>{
+    const s = document.createElement("div");
+    s.className = "slide" + (i===0 ? " visible" : "");
+    s.innerHTML = (f.src ? `<img src="${f.src}" alt="">` : '<div class="vacio">🌷</div>') + '<div class="leyenda"></div>';
+    s.querySelector(".leyenda").textContent = f.texto;
+    car.appendChild(s);
+    if(!muchas){
+      const p = document.createElement("i"); if(i===0) p.className = "on";
+      p.onclick = () => { irA(i); reiniciar(); };
+      pts.appendChild(p);
+    }
+  });
+  if(muchas) pts.innerHTML = `<span class="contadorFotos" id="contadorFotos">1 / ${totalFotos}</span>`;
+  if(totalFotos < 2){ $("ant").style.display = $("sig").style.display = "none"; return; }
+
+  $("ant").onclick = () => { irA(actual-1); reiniciar(); };
+  $("sig").onclick = () => { irA(actual+1); reiniciar(); };
+  // Deslizar con el dedo en el celular
+  let x0 = null;
+  car.addEventListener("touchstart", e => x0 = e.touches[0].clientX, {passive:true});
+  car.addEventListener("touchend", e => {
+    if(x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if(Math.abs(dx) > 40){ irA(actual + (dx < 0 ? 1 : -1)); reiniciar(); }
+    x0 = null;
+  });
+  reiniciar();
+}
+function irA(i){
+  const slides = document.querySelectorAll(".slide"), pts = document.querySelectorAll("#puntos i");
+  slides[actual].classList.remove("visible"); if(pts[actual]) pts[actual].classList.remove("on");
+  actual = (i + slides.length) % slides.length;
+  slides[actual].classList.add("visible"); if(pts[actual]) pts[actual].classList.add("on");
+  if($("contadorFotos")) $("contadorFotos").textContent = `${actual+1} / ${totalFotos}`;
+}
+function reiniciar(){ clearInterval(timer); timer = setInterval(()=>irA(actual+1), CONFIG.segundosPorFoto*1000); }
+
+/* ---------- 3. Preguntas ---------- */
+let nPregunta = 0;
+$("btnCarta").onclick = () => { nPregunta = 0; mostrar("p-preguntas"); mostrarPregunta(); };
+
+function respuestaCorrecta(q){
+  const r = diferencia(inicio, new Date());
+  if(q.respuesta === "AUTO_MESES") return [String(CONFIG.mesesCumplimos)];
+  if(q.respuesta === "AUTO_ANIOS") return [String(r.y)];
+  return Array.isArray(q.respuesta) ? q.respuesta : [q.respuesta];
+}
+
+function mostrarPregunta(){
+  const q = CONFIG.preguntas[nPregunta];
+  $("progreso").textContent = CONFIG.preguntas.map((_,i)=> i<nPregunta ? "❤" : "🤍").join("");
+  $("textoPregunta").textContent = q.pregunta;
+  $("msgPregunta").textContent = "";
+  const zona = $("zonaRespuesta"); zona.innerHTML = "";
+
+  if(q.tipo === "opciones"){
+    const cont = document.createElement("div"); cont.className="opciones";
+    q.opciones.forEach(op=>{
+      const b = document.createElement("button"); b.className="opcion"; b.textContent=op;
+      b.onclick = () => verificar(op);
+      cont.appendChild(b);
+    });
+    zona.appendChild(cont);
+  } else {
+    const inp = document.createElement("input");
+    inp.id = "resp";
+    inp.type = q.tipo==="fecha" ? "date" : (q.tipo==="numero" ? "number" : "text");
+    inp.placeholder = "Tu respuesta…";
+    inp.onkeydown = e => { if(e.key==="Enter") verificar(inp.value); };
+    const b = document.createElement("button"); b.className="btn"; b.textContent="Responder 💕";
+    b.onclick = () => verificar(inp.value);
+    zona.append(inp, b);
+    setTimeout(()=>inp.focus(), 300);
+  }
+}
+
+let intentos = 0;
+function verificar(valor){
+  const q = CONFIG.preguntas[nPregunta];
+  const ok = respuestaCorrecta(q).some(r => normalizar(r) === normalizar(valor));
+  if(ok){
+    intentos = 0;
+    $("msgPregunta").textContent = "¡Correcto, mi amor! 💖";
+    lluviaDeCorazones(15);
+    nPregunta++;
+    setTimeout(()=>{
+      if(nPregunta < CONFIG.preguntas.length) mostrarPregunta();
+      else { mostrar("p-carta"); prepararCarta(); }
+    }, 1100);
+  } else {
+    intentos++;
+    const t = $("tarjetaPregunta");
+    t.classList.add("temblar"); setTimeout(()=>t.classList.remove("temblar"),500);
+    $("msgPregunta").innerHTML = "Mmm… casi 🙈" + (intentos>=2 && q.pista ? `<div class="pista">Pista: ${q.pista}</div>` : "");
+  }
+}
+
+/* ---------- 4. Carta ---------- */
+function prepararCarta(){
+  $("sobre").onclick = () => {
+    if($("sobre").classList.contains("abierto")) return;
+    $("sobre").classList.add("abierto");
+    $("toca").style.display = "none";
+    lluviaDeCorazones(60);
+    setTimeout(()=>{
+      $("sobre").style.display = "none"; $("tituloSobre").style.display = "none";
+      $("carta").style.display = "block";
+      $("saludoCarta").textContent = "Querida " + CONFIG.nombreElla + ",";
+      const meses = CONFIG.mesesCumplimos;
+      escribir(CONFIG.carta.replace(/{MESES}/g, meses));
+    }, 900);
+  };
+}
+function escribir(texto){
+  const el = $("textoCarta"); el.classList.add("cursor"); let i = 0;
+  const paso = () => {
+    el.textContent = texto.slice(0, ++i);
+    if(i < texto.length) setTimeout(paso, texto[i-1]==="\n" ? 250 : 35);
+    else {
+      el.classList.remove("cursor");
+      $("firma").textContent = "Con amor, " + CONFIG.tuNombre + " ❤";
+      $("firma").style.opacity = 1;
+      lluviaDeCorazones(50);
+    }
+  };
+  paso();
+}
+</script>
+</body>
+</html>
