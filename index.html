@@ -170,6 +170,7 @@
 
   #btnMusica{position:fixed;top:14px;right:14px;z-index:5;background:var(--vidrio);border:1px solid var(--borde);
              color:#fff;width:44px;height:44px;border-radius:50%;font-size:1.2rem;cursor:pointer;backdrop-filter:blur(8px)}
+  #btnMusica.pedir{animation:latido 1.2s ease-in-out infinite;box-shadow:0 0 0 4px rgba(255,111,165,.5)}
 </style>
 </head>
 <body>
@@ -250,7 +251,7 @@ const CONFIG = {
   musica:     "cancion/cancion.mp3",     // ruta de la canción dentro del repositorio
 
   // FOTOS ILIMITADAS: solo súbelas a la carpeta "fotos" con nombres consecutivos
-  // foto1.jpg, foto2.jpg, foto3.png ... (sin saltarte números). El detalle las detecta solo.
+  // 1.jpg, 2.jpeg, 3.png ... o foto1.jpg, foto2.jpg ... (sin saltarte números). El detalle las detecta solo.
   carpetaFotos: "fotos/",
   extensiones: ["jpg","jpeg","png","webp","JPG","JPEG","PNG"],
   maxFotos: 300,
@@ -331,10 +332,22 @@ function mostrar(id){
 }
 
 /* ---------- Música ---------- */
+function tocarMusica(){
+  const a = $("audio");
+  if(!CONFIG.musica || !a.paused) return;
+  a.play().then(()=>{ $("btnMusica").textContent = "🎵"; $("btnMusica").classList.remove("pedir"); })
+          .catch(()=>{ $("btnMusica").textContent = "🔇"; $("btnMusica").classList.add("pedir"); });
+}
 if(CONFIG.musica){
-  $("audio").src = CONFIG.musica;
+  const a = $("audio");
+  a.preload = "auto";
+  a.src = CONFIG.musica;
+  // Si la ruta principal falla, prueba la carpeta "musica/"
+  a.onerror = () => { if(!a.dataset.alt){ a.dataset.alt = 1; a.src = "musica/cancion.mp3"; } };
   $("btnMusica").style.display = "block";
-  $("btnMusica").onclick = () => { const a=$("audio"); a.paused ? a.play() : a.pause(); };
+  $("btnMusica").onclick = e => { e.stopPropagation(); a.paused ? tocarMusica() : (a.pause(), $("btnMusica").textContent = "🔇"); };
+  // Cualquier toque en la página inicia la música si aún no suena
+  ["click","touchend"].forEach(ev => document.addEventListener(ev, tocarMusica, {passive:true}));
 }
 
 /* ---------- 1. Inicio ---------- */
@@ -353,7 +366,7 @@ $("btnEntrar").onclick = () => {
     return;
   }
   lluviaDeCorazones();
-  if(CONFIG.musica) $("audio").play().catch(()=>{});
+  tocarMusica();
   mostrar("p-recuerdos");
   iniciarContador();
   iniciarCarrusel();
@@ -385,9 +398,12 @@ async function buscarFotos(){
   const fotos = [], frases = CONFIG.frasesPorDefecto;
   for(let n = 1; n <= CONFIG.maxFotos; n++){
     let src = null;
-    for(const ext of CONFIG.extensiones){
-      src = await cargarImagen(`${CONFIG.carpetaFotos}foto${n}.${ext}`);
-      if(src) break;
+    // Acepta "1.jpg" o "foto1.jpg", con cualquiera de las extensiones
+    buscar: for(const pre of ["", "foto"]){
+      for(const ext of CONFIG.extensiones){
+        src = await cargarImagen(`${CONFIG.carpetaFotos}${pre}${n}.${ext}`);
+        if(src) break buscar;
+      }
     }
     if(!src) break;
     fotos.push({ src, texto: CONFIG.leyendas[n] || frases[(n-1) % frases.length] });
