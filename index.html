@@ -155,25 +155,36 @@
   .sobre.abierto .sello{opacity:0;transform:translate(-50%,-50%) scale(2)}
   .toca{opacity:.8;animation:latido 1.6s infinite}
 
+  /* Carta en hojas: legible en celular, sin columnas interminables */
   .carta{
-    display:none;text-align:left;color:#3d0a22;line-height:1.75;font-size:1.02rem;
-    /* Papel opaco color crema con renglones suaves */
-    background-color:#fff8f0;
-    background-image:
-      repeating-linear-gradient(transparent 0 37px, rgba(194,24,91,.12) 37px 38px),
-      linear-gradient(#fffaf3,#ffeef3);
-    border-radius:12px;padding:36px 28px;
+    display:none;text-align:left;color:#3d0a22;position:relative;z-index:3;touch-action:pan-y;
+    background:linear-gradient(#fffaf3,#ffeef3);border-radius:16px;padding:30px 22px 18px;
     box-shadow:0 25px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.6), inset 0 0 40px rgba(255,182,193,.25);
-    position:relative;z-index:3;
     animation:aparecer 1s ease;
   }
   .carta::before{content:"🌷";position:absolute;top:-18px;left:22px;font-size:2.2rem;filter:drop-shadow(0 4px 6px rgba(0,0,0,.3))}
-  .carta h3{font-family:'Great Vibes',cursive;font-size:2.5rem;color:#b0124f;margin-bottom:12px;font-weight:400}
-  .carta .texto{white-space:pre-line;font-family:'Dancing Script',cursive;font-weight:700;
-                font-size:1.45rem;line-height:38px;color:#3d0a22;min-height:120px}
-  .carta .firma{text-align:right;font-family:'Great Vibes',cursive;font-size:2rem;color:#c2185b;margin-top:16px;opacity:0;transition:1s}
-  .cursor::after{content:"|";animation:parpadeo .8s infinite}
-  @keyframes parpadeo{50%{opacity:0}}
+  .carta .cabecera{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;min-height:20px}
+  .carta h3{margin-top:8px;font-family:'Great Vibes',cursive;font-size:2.3rem;color:#b0124f;font-weight:400;line-height:1.1}
+  .carta .hoja-num{position:absolute;top:12px;right:18px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:#c2185b;opacity:.75;white-space:nowrap}
+  .carta .hoja{min-height:min(50vh,420px);font-family:'Dancing Script',cursive;font-weight:600;font-size:1.3rem;line-height:1.55}
+  .carta .hoja p{margin-bottom:14px}
+  .carta .hoja p.destacado{text-align:center;font-weight:700;font-size:1.45rem;line-height:1.35;color:#b0124f;margin:4px 0 16px}
+  .carta .cita{color:#b0124f;font-style:italic}
+  .carta .w{opacity:0;filter:blur(3px);animation:palabra .55s ease forwards}
+  @keyframes palabra{to{opacity:1;filter:blur(0)}}
+  .carta .hoja.der{animation:entraDer .45s ease}
+  .carta .hoja.izq{animation:entraIzq .45s ease}
+  @keyframes entraDer{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+  @keyframes entraIzq{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
+  .carta .firma{display:none;text-align:right;font-family:'Great Vibes',cursive;font-size:2.1rem;color:#b0124f;opacity:0;transition:opacity 1.5s}
+  .nav-carta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:14px;padding-top:12px;border-top:1px dashed rgba(194,24,91,.25)}
+  .navbtn{border:none;cursor:pointer;font-family:'Poppins',sans-serif;font-weight:600;font-size:.82rem;padding:9px 14px;border-radius:30px;background:#fde3ec;color:#b0124f;min-width:92px}
+  .navbtn.sig{background:linear-gradient(135deg,#ff4f8b,#c2185b);color:#fff;box-shadow:0 6px 16px rgba(194,24,91,.35)}
+  .navbtn.invisible{visibility:hidden}
+  .puntos-carta{display:flex;gap:5px;align-items:center}
+  .puntos-carta i{width:6px;height:6px;border-radius:50%;background:rgba(194,24,91,.25);transition:.3s}
+  .puntos-carta i.on{background:#c2185b;width:16px;border-radius:4px}
+  .desliza{display:none;margin-top:12px;font-size:.78rem;opacity:.75}
 
   #btnMusica{position:fixed;top:14px;right:14px;z-index:5;background:var(--vidrio);border:1px solid var(--borde);
              color:#fff;width:44px;height:44px;border-radius:50%;font-size:1.2rem;cursor:pointer;backdrop-filter:blur(8px)}
@@ -239,10 +250,16 @@
     </div>
     <p class="toca" id="toca">Toca el sobre para abrirlo</p>
     <div class="carta" id="carta">
-      <h3 id="saludoCarta"></h3>
-      <div class="texto" id="textoCarta"></div>
+      <div class="cabecera"><h3 id="saludoCarta"></h3><span class="hoja-num" id="hojaNum"></span></div>
+      <div class="hoja" id="hoja"></div>
       <div class="firma" id="firma"></div>
+      <div class="nav-carta">
+        <button class="navbtn" id="hojaAnt">‹ Atrás</button>
+        <div class="puntos-carta" id="puntosCarta"></div>
+        <button class="navbtn sig" id="hojaSig">Seguir ›</button>
+      </div>
     </div>
+    <p class="desliza" id="desliza">Desliza la hoja o toca «Seguir» 🌷</p>
   </section>
 </main>
 
@@ -284,27 +301,52 @@ const CONFIG = {
       pista:"Fue un día muy especial… 💘" },
     { pregunta:"¿Cuántos meses cumplimos hoy?", tipo:"numero", respuesta:"AUTO_MESES",
       pista:"Cuenta bien, cada mes contigo vale oro ✨" },
-    { pregunta:"¿Dónde fue nuestra primera cita?", tipo:"texto", respuesta:["parque kennedy","miraflores"],
-      pista:"Empieza con P… 😉" },
+    { pregunta:"¿Dónde fue nuestro primer beso?", tipo:"opciones",
+      opciones:["En el cine 🎬","En un parque 🌳","En el carro, frente a mi casa 🚗","En la playa 🌊"],
+      respuesta:"En el carro, frente a mi casa 🚗",
+      pista:"Estábamos muy cerca de tu casa… 🏠" },
     { pregunta:"¿Qué es lo que más amo de ti?", tipo:"opciones",
       opciones:["Tu sonrisa","Tus ojos","Tu forma de ser","¡Todo! 💖"], respuesta:"¡Todo! 💖",
       pista:"Piensa en grande 😌" },
+    { pregunta:"¿Qué palabra me repites casi siempre y que me gusta?", tipo:"texto",
+      respuesta:["odioso"],
+      pista:"Empieza con O… y me la dices con mucho cariño 😏" },
   ],
 
   // La carta (usa saltos de línea normales)
-  carta: `Desde el día en que llegaste a mi vida, todo tiene más color.
+  // Título de la carta
+  saludoCarta: "Gisse, mi amor",
 
-Gracias por cada sonrisa, cada abrazo y cada momento que hemos compartido. Eres mi lugar seguro, mi alegría y mi persona favorita.
-
-Hoy cumplimos {MESES} meses juntos y quiero que sepas que te elegiría una y mil veces más.
-
-Te amo con todo mi corazón.`
+  // CARTA dividida en hojas. Cada hoja es una lista de párrafos.
+  // Un párrafo que empieza con "##" se muestra centrado y destacado.
+  // Las frases entre «comillas» se resaltan en color.
+  carta: [
+    [ "## ❤️ ¡Felices 4 meses, mi amorcito hermoso! ❤️😘",
+      "Quién iba a imaginar, amor, que aquel beso que te robé la madrugada del 4 de julio nos traería hasta aquí, viviendo tantas cosas bonitas juntos. 🥰 Y pensar que aquella noche yo solo quería robarte un beso, sin imaginar todo lo maravilloso que vendría después… Y sabes algo, mi amor, si pudiera volver a esa madrugada, te volvería a robar ese beso, con las mismas ganas de entonces, una y mil veces más. ❤️" ],
+    [ "Han sido cuatro meses maravillosos, de los más bonitos de mi vida. Me haces inmensamente feliz, amor. Me encanta estar contigo, perderme en tu mirada, disfrutar de tu sonrisa, tus abrazos y esos besos tuyos que tanto me fascinan, hasta cuando vienen acompañados de esas mordiditas que me vuelven loco. 😘❤️" ],
+    [ "Me encantan nuestras salidas sin rumbo, nuestras canciones, los conciertos, las bromas, las locuras y esas noches en las que quisiera detener el tiempo para no tener que despedirme de ti.",
+      "Y es que, como dice nuestra canción, «apenas te alejas un poco y ya te extraño junto a mí». Así de bonito se ha vuelto tenerte en mi vida." ],
+    [ "Me encanta todo de ti, Gisse. Tu ternura, tus ojitos, tu manera de ser, incluso ese carácter tan tuyo que ya aprendí a querer. 🤭",
+      "Y cómo no mencionar esas veces en que te hago cosquillas y me dices «¡odioso!»… jajaja 😂. No sabes lo mucho que me gusta escucharte decirlo, porque detrás de esa palabra siempre encuentro esa sonrisa tuya que me encanta." ],
+    [ "Y aunque eres calladita y no siempre dices lo que sientes, he aprendido a entenderte en tus miradas, en tus besos y en esos «te quiero» que, cuando salen de tus labios, me llenan el corazón. ❤️",
+      "No sé qué nos traerá el tiempo, mi amor, pero sí sé que me ilusiona muchísimo pensar en todas las cosas bonitas que todavía nos faltan vivir." ],
+    [ "Quiero seguir conociéndote, haciéndote reír, conquistándote, ganándome tus besos y encontrando mil excusas para estar cerquita de ti.",
+      "Gracias por estos cuatro meses, por cada momento compartido, por hacerme tan feliz y por permitirme ser parte de tu vida. Y pensar que todo comenzó porque quería ganar unos puntitos contigo… jajajaja 😂🤭 ¡Mira en lo que terminaron convirtiéndose esos puntos!" ],
+    [ "Hoy puedo decirte algo que también quise dejar en nuestra canción:",
+      "## «Yo solo quería un beso… y ahora te quiero mucho más de lo que pude imaginar». ❤️",
+      "Te quiero muchísimo, mi amorcito hermoso. Y quiero seguir comiéndome el mundo contigo, sumando aventuras, risas, abrazos, noches inolvidables y muchísimos besos más." ],
+    [ "Porque si algo tengo claro es que volvería a aquella madrugada del 4 de julio, te robaría aquel primer beso otra vez… y una y mil veces más. 🥰❤️😘",
+      "## ¡Felices cuatro meses, mi amor! ❤️",
+      "Esta canción es para ti, para nosotros y para todos esos momentos bonitos que todavía nos esperan. 🎶💕" ],
+  ]
 };
 /* ========================================================= */
 
 const $ = id => document.getElementById(id);
 const parseFecha = s => { const [a,m,d] = s.split("-").map(Number); return new Date(a, m-1, d); };
-const normalizar = s => String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+// Ignora may\u00fasculas, tildes, signos y emojis al comparar respuestas ("\u00a1Odioso!" = "odioso")
+const normalizar = s => String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+                         .replace(/[^a-z0-9]+/g," ").trim();
 
 function diferencia(inicio, ahora){
   let y = ahora.getFullYear()-inicio.getFullYear();
@@ -523,7 +565,63 @@ function verificar(valor){
   }
 }
 
-/* ---------- 4. Carta ---------- */
+/* ---------- 4. Carta en hojas ---------- */
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+// Envuelve cada palabra para que aparezca suavemente, y resalta las «citas»
+function formatear(texto, c){
+  return texto.split(/(«[^»]*»)/).map(seg => {
+    if(!seg) return "";
+    const html = seg.split(/(\s+)/).map(t => (!t || /^\s+$/.test(t)) ? t
+      : `<span class="w" style="animation-delay:${(c.n++)*22}ms">${esc(t)}</span>`).join("");
+    return seg.startsWith("«") ? `<span class="cita">${html}</span>` : html;
+  }).join("");
+}
+let hojaActual = 0, finalCelebrado = false;
+function mostrarHoja(n, dir = 1){
+  const total = CONFIG.carta.length;
+  if(n < 0 || n >= total) return;
+  hojaActual = n;
+  const c = { n:0 }, hoja = $("hoja");
+  hoja.innerHTML = CONFIG.carta[n].map(p => {
+    const dest = p.startsWith("##"), t = dest ? p.slice(2).trim() : p;
+    return `<p class="${dest ? "destacado" : ""}">${formatear(t, c)}</p>`;
+  }).join("");
+  hoja.classList.remove("der","izq"); void hoja.offsetWidth; hoja.classList.add(dir > 0 ? "der" : "izq");
+
+  const ultima = n === total - 1;
+  $("saludoCarta").style.display = n === 0 ? "" : "none";
+  $("hojaNum").textContent = `Hoja ${n+1} de ${total}`;
+  $("hojaAnt").classList.toggle("invisible", n === 0);
+  $("hojaSig").classList.toggle("invisible", ultima);
+  $("puntosCarta").innerHTML = CONFIG.carta.map((_,i) => `<i class="${i===n?"on":""}"></i>`).join("");
+  const firma = $("firma");
+  firma.style.display = ultima ? "block" : "none"; firma.style.opacity = 0;
+  if(ultima){
+    setTimeout(()=>{ firma.style.opacity = 1; }, c.n*22 + 500);
+    if(!finalCelebrado){ finalCelebrado = true; setTimeout(()=>lluviaDeCorazones(60), c.n*22 + 600); }
+    tocarMusica();
+  }
+  const y = $("carta").getBoundingClientRect().top + window.scrollY - 30;
+  if(Math.abs(window.scrollY - y) > 10) window.scrollTo({ top: Math.max(0,y), behavior:"smooth" });
+}
+$("hojaSig").onclick = () => mostrarHoja(hojaActual + 1, 1);
+$("hojaAnt").onclick = () => mostrarHoja(hojaActual - 1, -1);
+(() => {   // deslizar con el dedo
+  let x0 = null, y0 = null;
+  $("carta").addEventListener("touchstart", e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, {passive:true});
+  $("carta").addEventListener("touchend", e => {
+    if(x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) mostrarHoja(hojaActual + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+    x0 = null;
+  });
+  document.addEventListener("keydown", e => {
+    if($("carta").style.display !== "block") return;
+    if(e.key === "ArrowRight") mostrarHoja(hojaActual + 1, 1);
+    if(e.key === "ArrowLeft") mostrarHoja(hojaActual - 1, -1);
+  });
+})();
+
 function prepararCarta(){
   $("sobre").onclick = () => {
     if($("sobre").classList.contains("abierto")) return;
@@ -532,26 +630,12 @@ function prepararCarta(){
     lluviaDeCorazones(60);
     setTimeout(()=>{
       $("sobre").style.display = "none"; $("tituloSobre").style.display = "none";
-      $("carta").style.display = "block";
-      $("saludoCarta").textContent = "Querida " + CONFIG.nombreElla + ",";
-      const meses = CONFIG.mesesCumplimos;
-      escribir(CONFIG.carta.replace(/{MESES}/g, meses));
+      $("carta").style.display = "block"; $("desliza").style.display = "block";
+      $("saludoCarta").textContent = CONFIG.saludoCarta;
+      $("firma").textContent = "Con amor, " + CONFIG.tuNombre + " ❤";
+      mostrarHoja(0);
     }, 900);
   };
-}
-function escribir(texto){
-  const el = $("textoCarta"); el.classList.add("cursor"); let i = 0;
-  const paso = () => {
-    el.textContent = texto.slice(0, ++i);
-    if(i < texto.length) setTimeout(paso, texto[i-1]==="\n" ? 250 : 35);
-    else {
-      el.classList.remove("cursor");
-      $("firma").textContent = "Con amor, " + CONFIG.tuNombre + " ❤";
-      $("firma").style.opacity = 1;
-      lluviaDeCorazones(50);
-    }
-  };
-  paso();
 }
 </script>
 </body>
